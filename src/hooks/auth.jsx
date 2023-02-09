@@ -36,6 +36,24 @@ export const AuthContext = createContext({})
     setData({})
   }
 
+  async function updateProfile({user}){
+    try{
+
+      await api.put("/users", user)
+      localStorage.setItem('@rocketnotes:user', JSON.stringify(user))
+      setData({user, token: data.token})
+
+      alert("Perfil Atualizado")
+
+    } catch(error) {
+      if (error.response){
+        alert(error.response.data.message)
+      } else{
+        alert("Não foi possível atualizar o perfil.")
+      }
+    }
+  }
+
     useEffect(()=>{
       const token = localStorage.getItem("@rocketnotes:token")
       const user = localStorage.getItem("@rocketnotes:user")
@@ -56,7 +74,8 @@ export const AuthContext = createContext({})
   return (
     <AuthContext.Provider value={{ 
       signIn,
-      signOut, 
+      signOut,
+      updateProfile, 
       user: data.user
     }}>
       {children}

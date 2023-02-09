@@ -1,7 +1,9 @@
 import { useState } from "react"
 
 import { Container, Form} from "./styles"
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+
+import { api } from "../../services/api"
 
 import { Header } from "../../components/Header"
 import { Input } from "../../components/Input"
@@ -11,11 +13,16 @@ import { Section } from "../../components/Section"
 import { Button } from "../../components/Button"
 
 export function New(){
+  const [title, setTitle] = useState("")
+  const [description, setDescription] = useState("")
+
   const [links, setLinks] = useState([])
   const [newLink, setNewLink] = useState("")
 
   const [ tags, setTags] = useState([])
   const [ newTag, setNewTag ] = useState("")
+
+  const navigate = useNavigate()
 
   function handleAddLinks(){
     setLinks(prevState => [...prevState, newLink])
@@ -35,6 +42,30 @@ export function New(){
     setTags(prevState => prevState.filter(tag => tag!== deleted))
   }
   
+  async function handleNewNote(){
+   if(!title){
+    alert('Digite o Título da nota.')
+   }
+    
+   if (newLink){
+     alert('Você deixou um link no campo para adicionar, mas não clicou em adicionar. Clique em adicionar, ou deixe o campo vazio')
+   }
+    
+   if (newTag){
+      alert('Você deixou uma tag no campo para adicionar, mas não clicou em adicionar. Clique em adicionar, ou deixe o campo vazio')
+    }
+
+
+    await api.post('/notes', {
+      title,
+      description,
+      tags,
+      links
+    })
+
+    alert("Nota criada com sucesso!")
+    navigate('/')
+  }
   
   return (
     <Container>
@@ -49,10 +80,12 @@ export function New(){
 
           <Input
             placeholder="Título"
+            onChange={e => setTitle(e.target.value)}
           />
 
           <TextArea
             placeholder="Observações"
+            onChange={e => setDescription(e.target.value)}
           />
 
           <Section 
@@ -106,6 +139,7 @@ export function New(){
 
           <Button
             title="Salvar"
+            onClick={handleNewNote}
           />
 
         </Form>

@@ -68,7 +68,7 @@ export function Profile(){
       <Form>
         <Avatar>
           <img 
-            src={avatar} 
+            src={avatarUrl} 
             alt="foto do usuário"
           />
 

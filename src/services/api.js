@@ -1,5 +1,5 @@
 import axios from 'axios'
 
 export const api = axios.create({
-  baseURL: 'https://rocketnotes-api-lfzv.onrender.com'
+  baseURL: 'https://rocketnotesbylb.herokuapp.com/'
 })
